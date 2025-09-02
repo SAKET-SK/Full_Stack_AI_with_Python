@@ -18,4 +18,5 @@ print(f"ID of 25000 is {id(25000)}")
 
 # Never come to the conclusion that numbers are mutable just because the variable name is same. Always check its ID
 # If the ID changes, it means a new object is created in memory. We just chnaged the reference. Hence numbers are immutable
-# If the ID remains same, it means the same object is being referenced. Hence mutable
+
+# If the ID remains same, it means the same object is being referenced. Hence immutable
