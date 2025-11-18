@@ -1,0 +1,1 @@
+Using 'with' statement to handle files is better.
