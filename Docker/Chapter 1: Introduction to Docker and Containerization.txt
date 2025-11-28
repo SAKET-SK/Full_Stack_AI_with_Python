@@ -1,0 +1,95 @@
+1.1) Evolution of Traditional Software Development
+
+Traditional software deployment often faced inconsistencies between development, testing, and production environments. Applications depended on specific versions 
+of libraries, system packages, configurations, or operating system features. Even slight differences caused failures, summarized by the phrase:
+
+“It works on my machine, but not on the server.”
+
+To address this, developers initially adopted Virtual Machines (VMs). VMs offered isolation but introduced substantial overhead due to full OS 
+duplication, increased resource consumption, and slow boot times. Docker introduced containerization, providing isolated environments with low 
+overhead by sharing the host operating system’s kernel.
+
+1.2) Virtual Machines (VMs) vs Containerization
+
+A Virtual Machine virtualizes hardware. Each VM contains:
+
+- A complete guest operating system
+- Its own kernel
+- Virtual hardware
+- Boot loaders and system services
+
+VM Architecture:
+
+┌──────────────────────────────┐
+│      Guest Application       │
+├──────────────────────────────┤
+│      Guest User Space        │
+├──────────────────────────────┤
+│      Guest Kernel            │ -> All VMs have their own kernel
+├──────────────────────────────┤
+│      Virtual Hardware        │ -> VMs have access to all hardware data
+├──────────────────────────────┤
+│      Hypervisor              │ -> Very "Memory" hungry
+├──────────────────────────────┤
+│      Host Operating System   │
+├──────────────────────────────┤
+│      Physical Hardware       │
+└──────────────────────────────┘
+
+Characteristics:
+- Heavyweight (consume large CPU/RAM)
+- Slow to boot
+- Multiple full operating systems
+- Strong isolation
+
+Containerization is light-weight, how? Because it is using your kernel, not your full OS. They provide just a small slice of an OS, known as "image".
+It is like running any OS in little amount of space.
+
+docker run -it ubuntu
+
+- docker run -> starts a container
+- ubuntu -> OS name / image that you want to run.
+- -it -> (we will see this later)
+
+Ctrl + D : Exit from the image
+
+You need to install Docker Engine. make sure everything is in running state to experiment with commands.
+Use command "docker version" to verify installation.
+
+Containers:
+A "container" is an isolated environment to run a docker image. Containers virtualize at the OS level. They isolate applications but share the 
+host kernel. Containers package the application and its dependencies without bundling an entire OS.
+
+Container Architecture:
+
+┌──────────────────────────────┐
+│      Application (Container) │
+├──────────────────────────────┤
+│      Container Filesystem    │
+├──────────────────────────────┤
+│     Container Engine (Docker)│
+├──────────────────────────────┤
+│      Host Kernel             │
+├──────────────────────────────┤
+│      Physical Hardware       │
+└──────────────────────────────┘
+
+Docker Image:
+A read-only, layered template containing:
+- Application code
+- Dependencies
+- Configurations
+- Default command
+
+Docker Container:
+A running instance of an image with:
+- Isolated processes
+- System namespaces
+- Writable layer
+
+Analogy:
+Image = Class
+Container = Object instance
+
+This chapter introduced the rise of containerization, the limitations of virtual machines, and how Docker uses kernel technologies to 
+provide lightweight, isolated environments. Foundational concepts including images, containers, namespaces, cgroups, and layered filesystems were covered.
