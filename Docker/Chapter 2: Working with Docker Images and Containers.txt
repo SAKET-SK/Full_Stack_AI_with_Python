@@ -1,0 +1,90 @@
+Docker engine is necessary to run docker. All container related management is done by this docker engine.
+
+The Docker CLI communicates with the Docker daemon to manage:
+- Images
+- Containers
+- Networks
+- Volumes
+
+If you write:
+docker run -it ubuntu -> run indicates that run the docker engine
+
+Type "docker" to obtain list of all commands you can run. (Refer the Docker_Commands.txt file)
+
+Some commands:
+docker ps -> lists only "running" containers
+docker ps -a -> lists "all" containers even if they are in exit state
+
+ps is a shorthand. You may type "docker ps --help"
+
+docker images   -> Gets all images on your machine
+
+There is always a docker socket (Docker Daemon) who listens to all our commands and gives us output.
+
+What this command does : docker run -it ubuntu
+- Image lookup (local or remote)
+- Container creation
+- Filesystem assembly
+- Namespace assignment
+ -cgroup application
+- Default command execution (/bin/bash for Ubuntu)
+- Terminal attachment (due to -it)
+
+Meaning of Flags:
+-i: Keeps STDIN open
+-t: Allocates a pseudo-terminal (TTY)
+
+Without -it, containers that rely on interactive shells exit immediately.
+
+For image name, first it checks whether I have a local copy of it. If yes, then it runs. If not, then it pulls it from internet.
+All the images can be found at Docker Hub. (hub.docker.com)
+
+docker pull <image-name>  -> pulls the image (doesn't run immidiately)
+
+docker image inspect <image-name>   -> Inspects the image, the name of image u specify should be on your machine. Gives all info in the form of metadata.
+
+docker image pull <image-name> -> pulls the image.
+docker iamges   -> lists all images
+docker image prune  -> removes dangling images i.e. removes unused images
+
+For more commands run : docker image --help
+
+Working with containers:
+
+docker container rm <container-id>  -> Removes the container
+The container id is visible at the start, when you type commands.
+
+docker run -it ubuntu -> Creates a container with random name.
+docker run -it --name <my-container-name> ubuntu   -> Here you can specify the name
+
+docker kill <container-id>   -> Terminate the container
+
+Difference between Killing and Removing
+Killing is just switching off your machine. It is still out there. Removing means deleting its existence overall.
+
+docker container rm <container-id>
+docker container rm <container-1-id> <container-2-id> ... <container-n-id>
+docker container rm --help
+
+Every "image" has an entry point. For example, defualt entry point for ubuntu is "bash".
+To get to know about entry point, input : "docker image inspect ubuntu"
+Scroll down and find:
+
+"cmd":[
+    "/bin/bash"
+],...
+
+docker run -it ubuntu ls  -> runs ls commands and exits
+If the ls is not given here, it will go to the entry point.
+
+docker run busybox ping google.com  -> The container remains running as long as its main process is active.
+
+In this chapter, we explored practical container and image management.
+You learned:
+- How to run, name, inspect, stop, kill, and delete containers
+- How to pull, inspect, prune, and remove images
+- The roles of ENTRYPOINT and CMD
+- Why interactive mode (-it) is required for shell-based images
+
+These fundamentals enable smooth container lifecycle management and prepare the foundation for advanced topics such as Dockerfiles, 
+networking, volumes, and orchestration.
