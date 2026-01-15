@@ -11,7 +11,7 @@ load_dotenv()
 
 client = OpenAI(
     api_key="YOUR_GEMINI_API_KEY",
-    base_url="https://genearivelanguage.googleapis.com/v1beta/"
+    base_url="https://generativelanguage.googleapis.com/v1beta/"
 )
 
 # The calls will be made to Google's Gemini API but using OpenAI's client structure.
