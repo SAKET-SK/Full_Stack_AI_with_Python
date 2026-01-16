@@ -2,13 +2,15 @@
 # In this case, we provide a few examples in the prompt to guide the model's response.
 # The model is expected to generate a response based on the provided examples and the instructions given in the prompt.
 
+# This technique is used in real life a lot, I mean for real !!!!
+
 from dotenv import load_dotenv
 from openai import OpenAI
 
 load_dotenv()   
 
 client = OpenAI(
-    api_key="AIzaSyCKaj5ZqHKAe7x0aPCj4yn9Pr_V8bLjoCQ",
+    api_key="YOUR_GEMINI_API_KEY",
     base_url="https://generativelanguage.googleapis.com/v1beta/"
 )
 
