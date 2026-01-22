@@ -44,7 +44,7 @@ def samplenode(state: State):
 graph_builder = StateGraph(State)
 
 # Registering nodes
-graph_builder.add_node("ai_node", ai_node)  # NEW: AI node using Groq
+graph_builder.add_node("ai_node", ai_node)  # NEW: AI node
 graph_builder.add_node("samplenode", samplenode)
 
 # Working with edges
@@ -67,3 +67,4 @@ updated_state = graph.invoke({
 print("\nFinal messages:\n")
 for msg in updated_state["messages"]:
     print(f"{type(msg).__name__}: {msg.content}")
+
