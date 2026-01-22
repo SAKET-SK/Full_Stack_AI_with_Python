@@ -5,7 +5,7 @@ import requests
 load_dotenv()   
 
 client = OpenAI(
-    api_key="AIzaSyCqU1FqRq4vmrQUfiPDNXgN3RnqH03iTy4",
+    api_key="YOUR_GEMIN_API_KEY",
     base_url="https://generativelanguage.googleapis.com/v1beta/"
 )
 
