@@ -1,80 +1,58 @@
-from typing import Annotated
-from langgraph.graph.message import add_messages   # Append only specific field in state
-from langgraph.graph import StateGraph, START, END
-from langchain.chat_models import init_chat_model
-from typing import Optional, Literal
-from openai import OpenAI
-
-client = OpenAI()
-
-import os
 from dotenv import load_dotenv
+from openai import OpenAI
+from typing_extensions import TypedDict
+from typing import Optional, Literal
+from langgraph.graph import StateGraph, START, END
 
 load_dotenv()
 
-# Get the API key
-# GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
-# if not GROQ_API_KEY:
-#     raise ValueError("GROQ_API_KEY not found in .env file!")
-
-# print("Groq API Key loaded successfully")
-
-# Initialize Groq chat model
-llm = init_chat_model(
-    model="gpt-4.1-mini",
-    provider="openai",
-)
-
-print("Groq LLM initialized")
+client = OpenAI()
 
 class State(TypedDict):
     user_query: str
     llm_output: Optional[str]
-    is_good_response: Optional[bool]
-    messages: Annotated[list, add_messages]
+    is_good: Optional[bool]
 
-def ai_node(state: State):
-    """Second node - uses AI to respond"""
+def chatbot(state: State):
     response = client.chat.completions.create(
         model="gpt-4.1-mini",
         messages=[
             {"role": "user", "content": state.get("user_query")}
-        ],
+        ]
     )
-    state["llm_output"] = response.choices[0].message.content
+    state["llm_output"] = response.choices[0].message.content    # Updating the state
     return state
 
-def evaluation_node(state: State) -> Literal["next_node", "end_node"]:
-    """Third node - checks the LLM output quality and decides the next step"""
+def evaluate_response(state: State) -> Literal["chatbot_gemini", "endnode"]:
     if True:
-        return "next_node"
+        return "endnode"
     
-    return "end_node"
+    return "chatbot_gemini"     # If evaluation is not good enough, redirect to this node
 
-# We can also write a node function with any other model, in case if the user is not satisfied with the response.
-    
-def end_node(state: State):
+def chatbot_gemini(state: State):
+    response = client.chat.completions.create(
+        model="gpt-4.1-mini",
+        messages=[
+            {"role": "user", "content": state.get("user_query")}
+        ]
+    )
+    state["llm_output"] = response.choices[0].message.content    # Updating the state
+    return state
+
+def endnode(state: State):
     return state
 
 graph_builder = StateGraph(State)
+graph_builder.add_node("chatbot", chatbot)
+graph_builder.add_node("chatbot_gemini", chatbot_gemini)
+graph_builder.add_node("endnode", endnode)
 
-# Registering nodes
-graph_builder.add_node("ai_node", ai_node)  # NEW: AI node using Groq
-graph_builder.add_node("evaluation_node", evaluation_node)
+graph_builder.add_edge(START, "chatbot")
+graph_builder.add_conditional_edges("chatbot", evaluate_response)
+graph_builder.add_edge("chatbot_gemini", "endnode")
+graph_builder.add_edge("endnode", END)
 
-# Working with edges
-graph_builder.add_edge(START, "ai_node")
-graph_builder.add_conditional_edge("ai_node", "evaluation_node")   # Addding the conditional edge
-graph_builder.add_edge("evaluation_node", END)
-
-# Compile the graph
 graph = graph_builder.compile()
 
-print("\nGraph compiled successfully")
-print("\nGraph Structure: START → ai_node → samplenode → END\n")
-
-initial_message = "Hello! Can you tell me a fun fact about Python programming?"
-print(f"\nInitial Message: {initial_message}\n")
-updated_state = graph.invoke(State({"messages": [initial_message]}))
-print("\nFinal State:", updated_state)
+updated_state =graph.invoke(State({"user_query": "Explain me the theory of relativity in simply 30 words"}))
+print(updated_state)
