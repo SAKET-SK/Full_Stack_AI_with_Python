@@ -50,12 +50,41 @@ with MongoDBSaver.from_conn_string(DB_URI) as checkpointer:
     }
 
     # Running the graph -> need to pass the initial state
-    updated_state = graph_with_checkpointer.invoke(
-        State({"messages": ["Hello, Good Day!"]}),
-        config,
-    )
-    
-    print("Final State:", updated_state)
+    for chunk in graph_with_checkpointer.stream(
+        State({"messages": ["What is my name?"]}),
+                config,
+                stream_mode="values"
+    ):
+        chunk["messages"][-1].pretty_print()
 
 # Checkpointer:
 # Under (saket) -> "Hello, Good Day!"
+
+# OUTPUT
+
+# (venv) PS D:\gen_ai-lab\LangGraph> python chat_checkpoint.py
+# ================================ Human Message =================================
+
+# Hello, Good Day!
+# Inside chatbot
+# ================================== Ai Message ==================================
+
+# Hello again! Hope you're having a great day! How can I help you today?
+# (venv) PS D:\gen_ai-lab\LangGraph> ^C
+# (venv) PS D:\gen_ai-lab\LangGraph> python chat_checkpoint.py
+# ================================ Human Message =================================
+
+# Hello, Good Day! My name is Saket
+# Inside chatbot
+# ================================== Ai Message ==================================
+
+# Hello Saket! Good day to you! How can I assist you today?
+# (venv) PS D:\gen_ai-lab\LangGraph> python chat_checkpoint.py
+# ================================ Human Message =================================
+
+# What is my name?
+# Inside chatbot
+# ================================== Ai Message ==================================
+
+# Your name is Saket. How can I assist you further today?
+# (venv) PS D:\gen_ai-lab\LangGraph> 
