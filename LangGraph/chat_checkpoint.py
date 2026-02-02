@@ -45,7 +45,7 @@ with MongoDBSaver.from_conn_string(DB_URI) as checkpointer:
 
     config = {
         "configurable": {
-            "thread_id": "saket"
+            "thread_id": "saket"    # Can be anything (text,number,etc.), as per your wish
         }
     }
 
