@@ -1,0 +1,24 @@
+Create a node in Neo4j
+
+CREATE(u:User {name:"Saket"})
+RETURN u;
+
+
+CREATE(u:Company {name:"OMFYS"})
+RETURN u;
+
+
+Establish relationship
+
+MERGE(u:User {name:"Saket"}) - [:EMPLOYEE] -> (c:Company {name:"OMFYS"})
+
+MATCH(u:User {name:"Saket"})
+MATCH(c:Company {name: "OMFYS"})
+
+MERGE(u) - [:EMPLOYEE]->(c)
+
+Delete by id
+
+MATCH (n)
+WHERE elementId(n) = '4:ddc1ab07-8a6a-4e7f-b732-1a99a602b038:11'
+DETACH DELETE n;
