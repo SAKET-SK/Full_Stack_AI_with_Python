@@ -10,4 +10,6 @@ Prerequisites : Need OpenAI key, deposit 5$ credits and use your key.
 - Section 5 : RAG + RAG Queues
 - Section 6 : LangGraph
 - Section 7 : Memories in AI (Check for the folders)
-- Section 8 : Git and Docker
+- Section 8 : Voice Agents
+- Section 9 : Agent SDK
+- Section 10 : Git and Docker
